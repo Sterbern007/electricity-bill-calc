@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Utility Bill Estimator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #e9ecef;
+        }
+        header {
+            background: #007bff;
+            color: #ffffff;
+            padding: 20px 0;
+            text-align: center;
+        }
+        nav {
+            background: #ffffff;
+            padding: 10px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        nav a {
+            margin: 0 15px;
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .hero {
+            background: url('https://images.unsplash.com/photo-1511691301000-5c8a9e4e8f7c') no-repeat center center/cover;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 2.5em;
+            margin: 0;
+        }
+        .hero p {
+            font-size: 1.2em;
+        }
+        .hero button {
+            padding: 10px 20px;
+            background: #ffffff;
+            color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        input {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px;
+            background: #007bff;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .tips {
+            margin-top: 20px;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        footer {
+            background: #007bff;
+            color: #ffffff;
+            text-align: center;
+            padding: 10px 0;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Utility Bill Estimator</h1>
+</header>
+
+<nav>
+    <a href="#" onclick="showSection('home')">Home</a>
+    <a href="#" onclick="showSection('register')">Register</a>
+    <a href="#" onclick="showSection('login')">Login</a>
+    <a href="#" onclick="showSection('estimate')">Estimate Bill</a>
+</nav>
+
+<div class="hero">
+    <div>
+        <h1>Estimate Your Utility Bills</h1>
+        <p>Save money and energy with our easy-to-use estimator!</p>
+        <button onclick="redirectToStart()">Get Started</button>
+    </div>
+</div>
+
+<div class="container">
+    <div id="home" class="section" style="display: block;">
+        <h2>Welcome to the Utility Bill Estimator</h2>
+        <p>Use our tool to estimate your utility bills and find tips to reduce your energy consumption.</p>
+    </div>
+
+    <div id="register" class="section" style="display: none;">
+        <h2>Register</h2>
+        <form onsubmit="registerUser (event)">
+            <input type="text" id="reg Username" placeholder="Username" required>
+            <input type="password" id="regPassword" placeholder="Password" required>
+            <button type="submit">Register</button>
+        </form>
+    </div>
+
+    <div id="login" class="section" style="display: none;">
+        <h2>Login</h2>
+        <form onsubmit="loginUser  (event)">
+            <input type="text" id="loginUsername" placeholder="Username" required>
+            <input type="password" id="loginPassword" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <div id="estimate" class="section" style="display: none;">
+        <h2>Estimate Bill</h2>
+        <form onsubmit="estimateBill(event)">
+            <input type="number" id="meterRent" placeholder="Meter Rent" required>
+            <input type="number" id="tax" placeholder="Tax" required>
+            <input type="number" id="unitRate" placeholder="Unit Rate" required>
+            <input type="number" id="usage" placeholder="Usage (kWh)" required>
+            <button type="submit">Estimate Bill</button>
+        </form>
+        <div id="estimatedBill" style="margin-top: 20px;"></div>
+        <div class="tips">
+            <h3>Tips to Reduce Electricity Usage:</h3>
+            <ul>
+                <li>Use energy-efficient appliances.</li>
+                <li>Turn off lights when not in use.</li>
+                <li>Utilize natural light during the day.</li>
+                <li>Unplug devices when not in use.</li>
+                <li>Consider using smart thermostats.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2023 Utility Bill Estimator. All rights reserved.</p>
+    <p><a href="#" style="color: #ffffff; text-decoration: none;">Privacy Policy</a> | <a href="#" style="color: #ffffff; text-decoration: none;">Terms of Service</a></p>
+</footer>
+
+<script>
+    let currentUser  = null;
+
+    function showSection(section) {
+        const sections = document.querySelectorAll('.section');
+        sections.forEach(s => s.style.display = 'none');
+        document.getElementById(section).style.display = 'block';
+    }
+
+    function redirectToStart() {
+        const users = Object.keys(localStorage);
+        if (users.length > 0) {
+            showSection('login');
+        } else {
+            showSection('register');
+        }
+    }
+
+    function registerUser (event) {
+        event.preventDefault();
+        const username = document.getElementById('regUsername').value;
+        const password = document.getElementById('regPassword').value;
+
+        if (localStorage.getItem(username)) {
+            alert('User  already exists!');
+            return;
+        }
+
+        const user = { username, password, bills: [], estimatedBills: [] };
+        localStorage.setItem(username, JSON.stringify(user));
+        alert('User  registered successfully!');
+        showSection('login');
+    }
+
+    function loginUser (event) {
+        event.preventDefault();
+        const username = document.getElementById('loginUsername').value;
+        const password = document.getElementById('loginPassword').value;
+
+        const user = JSON.parse(localStorage.getItem(username));
+        if (user && user.password === password) {
+            currentUser  = user;
+            alert('Login successful!');
+            showSection('estimate');
+        } else {
+            alert('Invalid credentials!');
+        }
+    }
+
+    function estimateBill(event) {
+        event.preventDefault();
+        const meterRent = parseFloat(document.getElementById('meterRent').value);
+        const tax = parseFloat(document.getElementById('tax').value);
+        const unitRate = parseFloat(document.getElementById('unitRate').value);
+        const usage = parseFloat(document.getElementById('usage').value);
+
+        const estimatedBill = (usage * unitRate) + tax + meterRent;
+        document.getElementById('estimatedBill').innerText = `Estimated Bill: ₹${estimatedBill.toFixed(2)}`;
+        
+        if (currentUser ) {
+            saveBill(estimatedBill);
+        }
+    }
+
+    function saveBill(amount) {
+        const user = JSON.parse(localStorage.getItem(currentUser .username));
+        user.estimatedBills.push({ date: new Date().toLocaleDateString(), amount });
+        localStorage.setItem(currentUser .username, JSON.stringify(user));
+    }
+</script>
+
+</body>
+</html>
